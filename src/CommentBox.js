@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import Comment from './Comment'
+import CommentForm from './CommentForm'
 
 class CommentBox extends Component {
   constructor() {
     super();
 
     this.state = {
-      showComments: false
+      showComments: false,
+      comments: [
+        {id: 1, author: "Barney Rubble", body: "I like rocks"},
+        {id: 2, author: "Fred Flintstone", body: "I love bowling on my tippy toes"}
+      ]
     }
   }
 
   getComments() {
-    const commentList = [
-      {id: 1, author: "Barney Rubble", body: "I like rocks"},
-      {id: 2, author: "Fred Flintstone", body: "I love bowling on my tippy toes"}
-    ]
-    return commentList.map((comment) => {
+    return this.state.comments.map((comment) => {
       return (<Comment author={comment.author} body={comment.body} key={comment.id}/>)
     })
   }
@@ -48,15 +49,24 @@ class CommentBox extends Component {
       </div>
     }
     return (
-      <div className="comment-box">
-      <button onClick={this.handleClick.bind(this)}>
+      <div>
+        <CommentForm addComment={this.addComment.bind(this)}/>
+        <div className="comment-box">
+      <button onClick={() => this.handleClick()}>
         {buttonText}
       </button>
       <h4 className="comment-count">{this.getCommentCount(comments.length)}</h4>
-      {commentNodes}
       </div>
-    )
+      <div>{commentNodes}</div>
+      </div>
+    );
   }
-}
+    addComment(author, body) {
+      const comment = {
+        id: this.state.comments.length + 1, author, body};
+        this.setState({comments: this.state.comments.concat([comment])
+        });
+      }
+  }
 
 export default CommentBox
